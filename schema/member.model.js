@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { member_status_enums, member_type_enums } = require("../lib/config");
+const { member_status_enums, member_type_enums, ordernary_enums } = require("../lib/config");
 
 const memberSchema = new mongoose.Schema ({
   mb_nick: {
@@ -10,6 +10,7 @@ const memberSchema = new mongoose.Schema ({
   mb_phone: {
     type: String,
     required: true,
+    index: {unique: true, sparse: true},
   },
   mb_password: {
     type: String,
@@ -36,20 +37,20 @@ const memberSchema = new mongoose.Schema ({
   },
   mb_address: {
     type: String,
-    required: false,
+    required: false
   },
   mb_description: {
     type: String,
-    required: false,
+    required: false
   },
   mb_image: {
     type: String,
-    required: false,
+    required: false
   },
   mb_point: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
   mb_top: {
     type: String,
@@ -63,7 +64,7 @@ const memberSchema = new mongoose.Schema ({
   mb_views: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
   mb_likes: {
     type: Number,
@@ -73,14 +74,14 @@ const memberSchema = new mongoose.Schema ({
   mb_follow_cnt: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
   mb_subscriber_cnt: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
-  {timestamps: true}  //createdAt updatedAt
-});
+ }, {timestamps: true}  //createdAt updatedAt
+);
 
 module.exports = mongoose.model("Member", memberSchema);

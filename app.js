@@ -15,6 +15,7 @@ app.set("views", "views");
 app.set("view engine", "ejs"); 
 
 // 4: Rooting codes
-app.use("/", router);
+//app.use("/resto", router_bssr);  //Admin va restoranlar uchun ishlatiladigan router EJS
+app.use("/", router);   //REACT frontend userlar uchun kk
 
 module.exports = app;
