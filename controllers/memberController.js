@@ -6,8 +6,10 @@ memberController.signup = async (req, res) => {
   try {
     console.log('POST: cont/signup');
     const data = req.body,
-      member = new Member(),
+      member = new Member(),  /* 1-member object, 2-service model */
       new_member = await member.signupData(data); /*ichiga req body yuborilyapti*/
+    
+    // TODO: AUTHENTICATE BASED ON JWT
 
     res.json({state: 'succeed', data: new_member});
   } catch(err) {
