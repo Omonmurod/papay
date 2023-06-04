@@ -2,6 +2,18 @@ const Member = require("../models/Member");
 
 let restaurantController = module.exports; /*pastdagi methodlarni yuklash imkonini beradi*/
 
+restaurantController.getMyRestaurantData = async (req, res) => {
+  try {
+    console.log('GET: cont/getMyRestaurantData');
+    //TOD: Get my restaurant products
+
+    res.render('restaurant-menu');
+  } catch(err) {
+    console.log(`ERROR, cont/getMyRestaurantData, ${err.message}`);
+    res.json({state: 'fail', message: err.message});
+  }
+};
+
 restaurantController.getSignupMyRestaurant = async (req, res) => {
   try {
     console.log('GET: cont/getSignupMyRestaurant');
@@ -18,10 +30,11 @@ restaurantController.signupProcess = async (req, res) => {
     const data = req.body,
       member = new Member(),  /* 1-member object, 2-service model */
       new_member = await member.signupData(data); /*ichiga req body yuborilyapti*/
+      
+      req.session.member = new_member; /* req ichiga session ichiga member yaratib uni yangi signedup memberga tenglanyapti */
+      // SESSION protsessi quriladi    /* yuqoridagi degani user qayta kirganda infolarini eslab qoladi */
+      res.redirect('/resto/products/menu');  /* bu yangi pageda signupdan keyin new_member datalarini o'qish mumkin bo'ladi */
 
-    // SESSION protsessi quriladi
-
-    res.json({state: 'succeed', data: new_member});
   } catch(err) {
     console.log(`ERROR, cont/signup, ${err.message}`);
     res.json({state: 'fail', message: err.message});
@@ -45,10 +58,23 @@ restaurantController.loginProcess = async (req, res) => {
       member = new Member(),
       result = await member.loginData(data); /*ichiga req body yuborilyapti*/
 
-    res.json({state: 'succeed', data: result});
+    req.session.member = result;
+    /* Login bo'lgan member turiga qarab turli routerlarga boradi */
+    req.session.save(function () {
+      res.redirect("/resto/products/menu");
+    });
+
   } catch(err) {
     console.log(`ERROR, cont/login, ${err.message}`);
     res.json({state: 'fail', message: err.message});
+  }
+};
+
+restaurantController.checkSessions = (req, res) => {
+  if(req.session?.member) {
+    res.json({ state: "succeed", data: req.session.member});
+  } else {
+    res.json({ state: "failed", message: "You are not authenticated"});
   }
 };
 
