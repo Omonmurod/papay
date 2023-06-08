@@ -1,18 +1,18 @@
-// CHALLENGE: MAX PROFIT
+/* TASK F: Shunday function tuzing, unga string agrument pass bo'lsin.
+Function ushbu argumentdagi faqat digitlarni yangi stringda return qilsin. */
 
-function buyStock(stock_prices) {
-  let smallestNumber = stock_prices[0];
-  let smallestIndex = 0;
+function findDigits(a) {
+  let array = a.split("");
+  let digits = [];
 
-  for (let i = 1; i < stock_prices.length; i++) {
-    if (stock_prices[i] < smallestNumber) {
-      smallestNumber = stock_prices[i];
-      smallestIndex = i;
+  for (let i = 0; i < array.length; i++) {
+    if (!isNaN(parseInt(array[i]))) {
+      digits.push(parseInt(array[i]));
     }
   }
-
-  return smallestIndex;
+  return digits.join("");
 }
 
-const prices = [9, 6, 4, 5, 30, 11];
-console.log("You should buy stock =>", buyStock(prices));
+console.log(findDigits("efdh90dr8gds4s2e5s45fe7s"));
+
+

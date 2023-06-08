@@ -36,7 +36,7 @@ restaurantController.signupProcess = async (req, res) => {
 
     req.session.member =
       new_member; /* req ichiga session ichiga member yaratib uni yangi signedup memberga tenglanyapti */
-    // SESSION protsessi quriladi    /* yuqoridagi degani user qayta kirganda infolarini eslab qoladi */
+    // SESSION protsessi quriladi    /* yuqoridagi degani user qayta zapros qilganda browser taniydi */
     res.redirect(
       "/resto/products/menu"
     ); /* bu yangi pageda signupdan keyin new_member datalarini o'qish mumkin bo'ladi */

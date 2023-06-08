@@ -4,20 +4,21 @@ const app = express();
 const router = require("./router.js");
 const router_bssr = require("./router_bssr.js");
 
+/* Bular hammasi pastdagi store uchun qilinyapti */
 let session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session); /* Tepadagi express sessionni berayapmiz */
+const MongoDBStore = require("connect-mongodb-session")(session); /* MongoDB storageni hosil qil yordam beradi */
 const store = new MongoDBStore({ /* MongoDBStore bu class, u orqali store objectiga yasalyapti */
-  uri: process.env.MONGO_URL, /* Objectning 1-qismiga MongoDB atlas URL berilyapti*/
-  collection: "sessions",
-});
+  uri: process.env.MONGO_URL, /* Objectning 1-qismiga MongoDB atlas URL berilyapti */
+  collection: "sessions",  /* Session auth yoziladi session collection ichiga */
+}); /* store un yangi connection hosil qildik schema model bn connect qilmadik */
 
 // 1: Entering codes
 app.use(express.static("public")); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 2: Codes based on SESSION
-app.use(
+// 2: Codes based on SESSION REQUESTLAR SHU YERDA VALIDATION QILINADI
+app.use( /* bu middleware */
   session({ /* session bu object */
     secret: process.env.SESSION_SECRET,  /* session secret kodi .env dan olib kelinyapti */
     cookie: {
@@ -30,7 +31,7 @@ app.use(
 );
 app.use(function(req, res, next) {
   res.locals.member = req.session.member;  /* Har bir kelayotgan req browser ichiga yuborilyapti. 
-  local ichidagi member objectda har bir authenticate bo'lgan user insoi bor */
+  local ichidagi member objectda har bir authenticate bo'lgan user infosi bor */
   next();
 });
 
