@@ -20,10 +20,14 @@ router_bssr.get("/check-me", restaurantController.checkSessions);
 router_bssr.get("/products/menu", restaurantController.getMyRestaurantData);
 router_bssr.post(
   "/products/create",
-  restaurantController.validateAuthRestaurant, /* Validate qilgan mb gina keyingiga o'tsin */
+  restaurantController.validateAuthRestaurant /* Validate qilgan mb gina keyingiga o'tsin */,
   uploader_product.array("product_images", 5),
   productController.addNewProduct
 );
-router_bssr.post("products/edit/:id", productController.updateChosenProduct);
+router_bssr.post(
+  "/products/edit/:id",
+  restaurantController.validateAuthRestaurant,
+  productController.updateChosenProduct
+);
 
 module.exports = router_bssr;

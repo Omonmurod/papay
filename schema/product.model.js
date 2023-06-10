@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { 
   product_collection_enums,
   product_status_enums,
-  product_size_enumms,
+  product_size_enums,
   product_volume_enums,
 } = require("../lib/config");
 const Schema = mongoose.Schema;
@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
       message: "{VALUE} is not among enum values",
     },
   },
-  profuct_status: {
+  product_status: {
     type: String,
     required: false,
     default: "PAUSED",
@@ -38,7 +38,7 @@ const productSchema = new mongoose.Schema({
       return sized_list.includes(this.product_collection);
     },
     enum: {
-      values: product_size_enumms,
+      values: product_size_enums,
       message: "{VALUE} is not among enum values",
     },
   },
