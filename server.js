@@ -4,19 +4,20 @@ const http = require("http");
 const mongoose = require("mongoose");
 
 const connectionString = process.env.MONGO_URL;
-mongoose.connect(
-  connectionString, 
+mongoose.set('strictQuery', false); /* Depication error bermasligi un yozilgan */
+mongoose.connect( /* Connect bu yerda MongoDB methodi */
+  connectionString,  /* Connect bu yerda function, har bir userni o'zini connection stringi bor */
   {
-    useNewUrlParser: true, 
+    useNewUrlParser: true, /* Dokumentatsiya bo'yicha qarayapmiz xolos */
     useUnifiedTopology: true,
   }, 
   (err, goose) => {
     if(err) console.log("ERROR on connection MongoDB");
     else {
       console.log("MongoDB connection succeed!");
-      console.log(goose);
-      const app = require("./app");
-      const server = http.createServer(app);  
+      //console.log(goose); /* Mongoose clientni beradi */
+      const app = require("./app");   // Bu tepada chaqirilmaydimi
+      const server = http.createServer(app);  //Bu shartmi
       let PORT = process.env.POT || 3013;
       server.listen(PORT, function() {
         console.log(

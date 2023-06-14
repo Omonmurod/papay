@@ -2,7 +2,17 @@ const Member = require("../models/Member");
 const Product = require("../models/Product");
 
 let restaurantController =
-  module.exports; /*pastdagi methodlarni yuklash imkonini beradi*/
+  module.exports; /*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
+
+restaurantController.home = (req, res) => {
+  try{
+    console.log("GET: cont/home");
+    res.render("home-page");
+  } catch(err) {
+    console.log(`ERROR, cont/home, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
 
 restaurantController.getMyRestaurantProducts = async (req, res) => {
   try {
@@ -20,7 +30,7 @@ restaurantController.getMyRestaurantProducts = async (req, res) => {
 restaurantController.getSignupMyRestaurant = async (req, res) => {
   try {
     console.log("GET: cont/getSignupMyRestaurant");
-    res.render("signup"); /* Signup EJS ga boradi */
+    res.render("sign-up"); /* Signup EJS ga boradi */
   } catch (err) {
     console.log(`ERROR, cont/getSignupMyRestaurant, ${err.message}`);
     res.json({ state: "fail", message: err.message });
@@ -29,7 +39,7 @@ restaurantController.getSignupMyRestaurant = async (req, res) => {
 
 restaurantController.signupProcess = async (req, res) => {
   try {
-    console.log("POST: cont/signup");
+    console.log("POST: cont/sign-up");
     const data = req.body,
       member = new Member() /* 1-member object, 2-service model */,
       new_member = await member.signupData(
@@ -43,7 +53,7 @@ restaurantController.signupProcess = async (req, res) => {
       "/resto/products/menu"
     ); /* bu yangi pageda signupdan keyin new_member datalarini o'qish mumkin bo'ladi */
   } catch (err) {
-    console.log(`ERROR, cont/signup, ${err.message}`);
+    console.log(`ERROR, cont/sign-up, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };

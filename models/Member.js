@@ -7,7 +7,8 @@ class Member {
   constructor() {
     this.memberModel = MemberModel; //Membermodel mongodb ning classi
   }
-
+  
+  /* class ichida method yozilsa function so'zi tushib qoladi */
   async signupData(input) {  /*u req body inputga keladi*/
     try {
       const salt = await bcrypt.genSalt();
@@ -40,7 +41,7 @@ class Member {
           {mb_nick: 1, mb_password: 1, _id: 0})
         .exec();  /* Static Method */
 
-      assert.ok(member, Definer.auth_err2);
+      assert.ok(member, Definer.auth_err2); /* undefined, null keganda errorga o'tadi */
       
       const isMatch = await bcrypt.compare(
         input.mb_password,

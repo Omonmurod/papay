@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); /* EXPRESS ichidan router olib chiqilyapti */
 const memberController = require("./controllers/memberController");
 
 /*****************************
@@ -20,4 +20,4 @@ router.get("/community", (req, res) => {
   res.send("This is a Community Page");
 });
 
-module.exports = router;
+module.exports = router; /* Hosil qilingan routerlarni export qilib olyapmiz */

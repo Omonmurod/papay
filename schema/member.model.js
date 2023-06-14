@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
-const { member_status_enums, member_type_enums, ordernary_enums } = require("../lib/config");
+const { 
+  member_status_enums, 
+  member_type_enums, 
+  ordernary_enums 
+} = require("../lib/config");
 
 const memberSchema = new mongoose.Schema ({
   mb_nick: {
     type: String,
     required: true,
-    index: {unique: true, sparse: true},
+    index: {unique: true, sparse: true}, /* MongoDB indekse */
   },
   mb_phone: {
     type: String,
@@ -30,7 +34,7 @@ const memberSchema = new mongoose.Schema ({
     type: String,
     required: false,
     default: "ACTIVE",
-    enum: {
+    enum: {  /* avvaldan belgilab olingan qiymat */
       values: member_status_enums,
       message: "{VALUE} is not among permitted values"
     }
@@ -84,4 +88,5 @@ const memberSchema = new mongoose.Schema ({
  }, {timestamps: true}  //createdAt updatedAt
 );
 
-module.exports = mongoose.model("Member", memberSchema);
+/* member model js dan qaytgan narsa bu model */
+module.exports = mongoose.model("Member", memberSchema); /* sariq model bu method */

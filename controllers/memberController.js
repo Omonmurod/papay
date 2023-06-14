@@ -1,8 +1,8 @@
 const Member = require("../models/Member");
 
-let memberController = module.exports; /*pastdagi methodlarni yuklash imkonini beradi*/
+let memberController = module.exports; /* pastdagi methodlarni yuklash imkonini beradi */
 
-memberController.signup = async (req, res) => {
+memberController.signup = async (req, res) => { /*method */
   try {
     console.log('POST: cont/signup');
     const data = req.body,
