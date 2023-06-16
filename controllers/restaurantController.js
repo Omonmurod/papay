@@ -1,14 +1,16 @@
+const Definer = require("../lib/mistake");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
+const assert = require("assert");
 
 let restaurantController =
   module.exports; /*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
 
 restaurantController.home = (req, res) => {
-  try{
+  try {
     console.log("GET: cont/home");
     res.render("home-page");
-  } catch(err) {
+  } catch (err) {
     console.log(`ERROR, cont/home, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
@@ -20,7 +22,7 @@ restaurantController.getMyRestaurantProducts = async (req, res) => {
     //TODO: Get my restaurant products
     const product = new Product();
     const data = await product.getAllProductsDataResto(res.locals.member);
-    res.render("restaurant-menu", {restaurant_data: data});
+    res.render("restaurant-menu", { restaurant_data: data });
   } catch (err) {
     console.log(`ERROR, cont/getMyRestaurantProducts, ${err.message}`);
     res.json({ state: "fail", message: err.message });
@@ -40,18 +42,21 @@ restaurantController.getSignupMyRestaurant = async (req, res) => {
 restaurantController.signupProcess = async (req, res) => {
   try {
     console.log("POST: cont/signupProcess");
-    const data = req.body,
-      member = new Member() /* 1-member object, 2-service model */,
-      new_member = await member.signupData(
-        data
-      ); /*ichiga req body yuborilyapti*/
+    assert(req.file, Definer.general_err3);
+    let new_member = req.body;
+    new_member.mb_type = "RESTAURANT";
+    new_member.mb_image = req.file.path;
 
-    req.session.member =
-      new_member; /* req ichiga session ichiga member yaratib uni yangi signedup memberga tenglanyapti */
+    const member = new Member(); /* 1-member object, 2-service model */
+    const result = await member.signupData(new_member);
+    assert(result, Definer.general_err1);
+    /*ichiga req body yuborilyapti*/
+
+    req.session.member = result;
+    /* req ichiga session ichiga member yaratib uni yangi signedup memberga tenglanyapti */
     // SESSION protsessi quriladi    /* yuqoridagi degani user qayta zapros qilganda browser taniydi */
-    res.redirect(
-      "/resto/products/menu"
-    ); /* bu yangi pageda signupdan keyin new_member datalarini o'qish mumkin bo'ladi */
+    res.redirect("/resto/products/menu");
+    /* bu yangi pageda signupdan keyin new_member datalarini o'qish mumkin bo'ladi */
   } catch (err) {
     console.log(`ERROR, cont/signupProcess, ${err.message}`);
     res.json({ state: "fail", message: err.message });
@@ -82,8 +87,8 @@ restaurantController.loginProcess = async (req, res) => {
     req.session.member = result;
     /* Login bo'lgan member turiga qarab turli routerlarga boradi */
     req.session.save(function () {
-      result.mb_type === 'ADMIN' 
-        ? res.redirect("/resto/all-restaurant") 
+      result.mb_type === "ADMIN"
+        ? res.redirect("/resto/all-restaurant")
         : res.redirect("/resto/products/menu");
     });
   } catch (err) {
