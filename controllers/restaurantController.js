@@ -3,8 +3,8 @@ const Member = require("../models/Member");
 const Product = require("../models/Product");
 const assert = require("assert");
 
-let restaurantController =
-  module.exports; /*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
+let restaurantController = module.exports;
+/*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
 
 restaurantController.home = (req, res) => {
   try {
