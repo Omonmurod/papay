@@ -66,8 +66,9 @@
             class="mb_confirm_password"
             placeholder="Parolni tasdiqlash"
             value=""
-            required
+            required  
           />
+          <!-- Member service model yaratib olinyapti  -->
         </div>
       </div>
 
@@ -112,8 +113,8 @@
 </body>
 
 <script>
-  $(function () {
-    let fileTarget = $(".filebox .upload-hidden");
+  $(function () {   /* HTML CSS lar tayyor bo'gandan keyin JQuery ishga tushadi */
+    let fileTarget = $(".filebox .upload-hidden"); /* . bn JQuery da classlar yasaladi */
     let filename = "";
     fileTarget.on("change", function () {
       if (window.FileReader) {

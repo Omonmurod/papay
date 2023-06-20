@@ -22,10 +22,10 @@ restaurantController.getMyRestaurantProducts = async (req, res) => {
     //TODO: Get my restaurant products
     const product = new Product();
     const data = await product.getAllProductsDataResto(res.locals.member);
-    res.render("restaurant-menu", { restaurant_data: data });
+    res.render("restaurant-menu", { restaurant_data: data }); /* Product js dan kelgan productlarni resta menu ejs ga qaytaramiz */
   } catch (err) {
     console.log(`ERROR, cont/getMyRestaurantProducts, ${err.message}`);
-    res.json({ state: "fail", message: err.message });
+    res.redirect("/resto");
   }
 };
 
@@ -81,14 +81,14 @@ restaurantController.loginProcess = async (req, res) => {
     // res.send("submitted");
 
     const data = req.body,
-      member = new Member(),
+      member = new Member(),  /* Member service model yaratib olinyapti */
       result = await member.loginData(data); /*ichiga req body yuborilyapti*/
-
+      /*tepadagi result bu object*/
     req.session.member = result;
-    /* Login bo'lgan member turiga qarab turli routerlarga boradi */
+    /* Session ichida member objectini yaratib resultni yuklayapmiz */
     req.session.save(function () {
       result.mb_type === "ADMIN"
-        ? res.redirect("/resto/all-restaurant")
+        ? res.redirect("/resto/all-restaurant") /* Agar req admin bo'lsa all restauga boradi */
         : res.redirect("/resto/products/menu");
     });
   } catch (err) {
@@ -98,8 +98,15 @@ restaurantController.loginProcess = async (req, res) => {
 };
 
 restaurantController.logout = (req, res) => {
-  console.log("GET cont.logout");
-  res.send("You are Logged out");
+  try {
+    console.log("GET cont/logout");
+    req.session.destroy(function() {
+      res.redirect("/resto");
+    });
+  } catch (err) {
+    console.log(`ERROR, cont/logout, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
 };
 
 restaurantController.validateAuthRestaurant = (req, res, next) => {

@@ -10,12 +10,12 @@ class Product {
 
   async getAllProductsDataResto(member) {
     try {
-      member._id = shapeIntoMongooseObjectId(member._id);
-      const result = await this.productModel.find({
-        restaurant_mb_id: member._id
+      member._id = shapeIntoMongooseObjectId(member._id); /* Log bo'lgan member id orqali */
+      const result = await this.productModel.find({  /* Product modeldan */
+        restaurant_mb_id: member._id   /* Resta mb idsi shu idga teng bo'lgan barcha productlarni ober deydi */
       });
       assert.ok(result, Definer.general_err1);
-      return result;
+      return result; /* O'sha productlarni return qiberadi */
     } catch  (err) {
       throw err;
     }
