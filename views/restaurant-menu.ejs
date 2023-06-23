@@ -67,6 +67,7 @@
               <input type="text" placeholder="Taom nomi" name="product_name" class="product_name">
             </div>
             <input name="product_status" value="PAUSED" class="product_status" hidden>
+            <!-- Bu hidden input ko'rnmaydi frontendda  backendga ma'lumot yuborish un kk faqat -->
           </div>
 
           <div class="half_input_frame">
@@ -156,6 +157,7 @@
   <script>
     $(function() {
 
+      //dish yoki drink select qilinganda miqdor value o'zgarishi
       $(".product_collection").on("change", () => {
         const selected_value = $(".product_collection").val();
         if(selected_value === 'drink') {
@@ -187,7 +189,7 @@
 
           if(result.state == "success") {
             alert('success');
-            location.reload();
+            location.reload();   //???
           } else {
             alert(result.message);
           }
@@ -198,7 +200,8 @@
 
     });
 
-    function validateForm() {
+    // Validation function
+    function validateForm() { 
       const restaurant_mb_id = $(".restaurant_mb_id").val(),
         product_name = $(".product_name").val(),
         product_price = $(".product_price").val(),
@@ -210,9 +213,11 @@
       if(restaurant_mb_id == "" || product_name == "" || product_price == "" || product_left_cnt == ""
         || product_collection == "" || product_description == "" || product_status == "") {
         alert("Iltimos hamma ma'lumotlarni kiriting!");
+        return false;
       } else return true;
     }
 
+    // Rasmni preload qib olyapti
     function previewFileHandler(input, order) {
       console.log(input);
       const image_class_name = input.className;

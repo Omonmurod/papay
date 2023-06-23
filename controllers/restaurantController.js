@@ -129,3 +129,30 @@ restaurantController.checkSessions = (req, res) => {
     res.json({ state: "failed", message: "You are not authenticated" });
   }
 };
+
+restaurantController.validateAdmin = (req, res, next) => {
+  if (req.session?.member?.mb_type === "ADMIN") {
+    /* Kelayotgan req ichida mb va mb type =RES bo'lsa*/
+    req.member = req.session.member; /* Req member qismiga req sess mb yuklanadi */
+    next();
+  } else {
+    const html = `<script>
+                    alert("Admin page: Permission denied!");
+                    window.location.replace('/resto');
+                 </script>`;
+    res.end(html);
+  }
+};
+
+restaurantController.getAllRestaurants = (req, res) => {
+  try {
+    console.log("GET cont/getAllRestaurants");
+    //Barcha restaurantlarni db dan chaqiramiz
+
+    res.render("all-restaurants");
+
+  } catch (err) {
+    console.log(`ERROR, cont/getAllRestaurants, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+}
