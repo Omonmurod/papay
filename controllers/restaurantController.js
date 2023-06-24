@@ -2,7 +2,7 @@ const Definer = require("../lib/mistake");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
 const assert = require("assert");
-const Resturant = require("../models/Restaurant");
+const Restaurant = require("../models/Restaurant");
 
 let restaurantController = module.exports;
 /*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
@@ -154,9 +154,8 @@ restaurantController.getAllRestaurants = async (req, res) => {
   try {
     console.log("GET cont/getAllRestaurants");
 
-    const restaurant = new Resturant();
+    const restaurant = new Restaurant();
     const restaurants_data = await restaurant.getAllRestaurantsData();
-    console.log("restaurants_data:", restaurants_data);
     res.render("all-restaurants", { restaurants_data: restaurants_data });
   } catch (err) {
     console.log(`ERROR, cont/getAllRestaurants, ${err.message}`);
@@ -167,7 +166,7 @@ restaurantController.getAllRestaurants = async (req, res) => {
 restaurantController.updateRestaurantByAdmin = async (req, res) => {
   try {
     console.log("POST cont/updateRestaurantByAdmin");
-    const restaurant = new Resturant();
+    const restaurant = new Restaurant();
     const result = await restaurant.updateRestaurantByAdminData(req.body);
     await res.json({ state: "success", data: result });
   } catch (err) {

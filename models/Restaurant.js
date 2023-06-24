@@ -3,7 +3,7 @@ const { shapeIntoMongooseObjectId } = require("../lib/config");
 const Definer = require("../lib/mistake");
 const MemberModel = require("../schema/member.model");
 
-class Resturant {
+class Restaurant {
   constructor() {
     this.memberModel = MemberModel; //Membermodel mongodb ning classi
   }
@@ -41,4 +41,4 @@ class Resturant {
   }
 }
 
-module.exports = Resturant;
+module.exports = Restaurant;
