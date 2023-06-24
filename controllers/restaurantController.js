@@ -2,6 +2,7 @@ const Definer = require("../lib/mistake");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
 const assert = require("assert");
+const Restaurant = require("../models/Restaurant");
 
 let restaurantController = module.exports;
 /*bu object modulening ichidagi expertsga teng pastdagi methodlarni yuklash imkonini beradi*/
@@ -22,7 +23,9 @@ restaurantController.getMyRestaurantProducts = async (req, res) => {
     //TODO: Get my restaurant products
     const product = new Product();
     const data = await product.getAllProductsDataResto(res.locals.member);
-    res.render("restaurant-menu", { restaurant_data: data }); /* Product js dan kelgan productlarni resta menu ejs ga qaytaramiz */
+    res.render("restaurant-menu", {
+      restaurant_data: data,
+    }); /* Product js dan kelgan productlarni resta menu ejs ga qaytaramiz */
   } catch (err) {
     console.log(`ERROR, cont/getMyRestaurantProducts, ${err.message}`);
     res.redirect("/resto");
@@ -81,14 +84,16 @@ restaurantController.loginProcess = async (req, res) => {
     // res.send("submitted");
 
     const data = req.body,
-      member = new Member(),  /* Member service model yaratib olinyapti */
+      member = new Member() /* Member service model yaratib olinyapti */,
       result = await member.loginData(data); /*ichiga req body yuborilyapti*/
-      /*tepadagi result bu object*/
+    /*tepadagi result bu object*/
     req.session.member = result;
     /* Session ichida member objectini yaratib resultni yuklayapmiz */
     req.session.save(function () {
       result.mb_type === "ADMIN"
-        ? res.redirect("/resto/all-restaurant") /* Agar req admin bo'lsa all restauga boradi */
+        ? res.redirect(
+            "/resto/all-restaurant"
+          ) /* Agar req admin bo'lsa all restauga boradi */
         : res.redirect("/resto/products/menu");
     });
   } catch (err) {
@@ -100,7 +105,7 @@ restaurantController.loginProcess = async (req, res) => {
 restaurantController.logout = (req, res) => {
   try {
     console.log("GET cont/logout");
-    req.session.destroy(function() {
+    req.session.destroy(function () {
       res.redirect("/resto");
     });
   } catch (err) {
@@ -133,7 +138,8 @@ restaurantController.checkSessions = (req, res) => {
 restaurantController.validateAdmin = (req, res, next) => {
   if (req.session?.member?.mb_type === "ADMIN") {
     /* Kelayotgan req ichida mb va mb type =RES bo'lsa*/
-    req.member = req.session.member; /* Req member qismiga req sess mb yuklanadi */
+    req.member =
+      req.session.member; /* Req member qismiga req sess mb yuklanadi */
     next();
   } else {
     const html = `<script>
@@ -144,15 +150,16 @@ restaurantController.validateAdmin = (req, res, next) => {
   }
 };
 
-restaurantController.getAllRestaurants = (req, res) => {
+restaurantController.getAllRestaurants = async (req, res) => {
   try {
     console.log("GET cont/getAllRestaurants");
-    //Barcha restaurantlarni db dan chaqiramiz
 
-    res.render("all-restaurants");
-
+    const restaurant = new Restaurant();
+    const restaurants_data = await restaurant.getAllRestaurantsData();
+    console.log("restaurants_data:", restaurants_data);
+    res.render("all-restaurants", { restaurants_data: restaurants_data });
   } catch (err) {
     console.log(`ERROR, cont/getAllRestaurants, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
-}
+};
