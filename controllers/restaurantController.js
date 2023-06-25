@@ -138,8 +138,8 @@ restaurantController.checkSessions = (req, res) => {
 restaurantController.validateAdmin = (req, res, next) => {
   if (req.session?.member?.mb_type === "ADMIN") {
     /* Kelayotgan req ichida mb va mb type =ADMIN bo'lsa*/
-    req.member = req.session.member;
-    /* Req member qismiga req sess mb yuklanadi */
+    req.member = req.session.member;   // kelajak ish uchun qoldirilgan
+    /* Sessiondagi mb datasini req ni mb elementiga yuklab beradi */
     next();
   } else {
     const html = `<script>
@@ -153,9 +153,11 @@ restaurantController.validateAdmin = (req, res, next) => {
 restaurantController.getAllRestaurants = async (req, res) => {
   try {
     console.log("GET cont/getAllRestaurants");
-
+    // Hamma restaurantlarni db dan chaqiramiz
     const restaurant = new Restaurant();
+    // Barcha restaurantlar resaurant objecti methodi orqali chaqiirib olinyapti
     const restaurants_data = await restaurant.getAllRestaurantsData();
+    // Qabul qilib olingan data shu urlga restaurants_data nomi bn yuborilyapti
     res.render("all-restaurants", { restaurants_data: restaurants_data });
   } catch (err) {
     console.log(`ERROR, cont/getAllRestaurants, ${err.message}`);
