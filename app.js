@@ -1,10 +1,10 @@
 console.log("Web Serverni boshlash");
 const express = require("express");
-const app =
-  express(); /* express instance ni yasab olyapmiz app degan object yasalyapti*/
+const app = express(); 
+  /* express instance ni yasab olyapmiz app degan object yasalyapti*/
 const router = require("./router.js");
 const router_bssr = require("./router_bssr.js");
-
+const cookieParser = require("cookie-parser");
 /* Bular hammasi pastdagi store uchun qilinyapti */
 let session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(
@@ -20,9 +20,9 @@ const store = new MongoDBStore({
 // 1: Entering codes
 app.use(express.static("public"));
 app.use(express.json());
-app.use(
-  express.urlencoded({ extended: true })
-); /* encoded kodlarni handle qiladi */
+app.use(express.urlencoded({ extended: true })); 
+/* encoded kodlarni handle qiladi */
+app.use(cookieParser());
 
 // 2: Codes based on SESSION REQUESTLAR SHU YERDA VALIDATION QILINADI
 app.use(
