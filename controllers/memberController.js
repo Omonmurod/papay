@@ -44,7 +44,7 @@ memberController.login = async (req, res) => {
 };
 
 memberController.logout = (req, res) => {
-  console.log("GET cont.logout");
+  console.log("GET cont/logout");
   res.send("You are Logged out");
 };
 
@@ -53,7 +53,7 @@ memberController.createToken = (result) => {
     const upload_data = {
       _id: result._id,
       mb_nick: result.mb_nick,
-      mb_type: result._mb_type,
+      my_type: result.mb_type,
     };
 
     const token = jwt.sign(upload_data, process.env.SECRET_TOKEN, {
@@ -62,6 +62,20 @@ memberController.createToken = (result) => {
 
     assert.ok(token, Definer.auth_err4);
     return token;
+  } catch (err) {
+    throw err;
+  }
+};
+
+memberController.checkMyAuten = (req, res) => {
+  try {
+    console.log('GET cont/checkMyAuten');
+    let token = req.cookies["access_token"];
+    console.log("token:::", token);
+
+    const member = token ? jwt.verify(token, process.env.SECRET_TOKEN) : null;
+    assert.ok(member, Definer.auth_err4);
+    res.json({ state: "succeed", data: member });
   } catch (err) {
     throw err;
   }
